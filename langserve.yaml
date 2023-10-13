@@ -1,0 +1,20 @@
+namespace: langserve
+langserve:
+  defines: runnable
+  metadata:
+    name: langserve
+    description: >-
+      LangServe helps developers deploy LangChain runnables and chains as a REST
+      API with FastAPI and uses Pydantic for data validation.
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    langserve:
+      build: .
+  services:
+    application-port:
+      container: langserve
+      port: 8000
+      host-port: 8000
+      publish: false
+      protocol: TCP
+      description: Port for running the app
