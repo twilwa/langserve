@@ -228,3 +228,45 @@ You can deploy to GCP Cloud Run using the following command:
 ```
 gcloud run deploy [your-service-name] --source . --port 8001 --allow-unauthenticated --region us-central1 --set-env-vars=OPENAI_API_KEY=your_key
 ```
+
+
+``## Deploying with Monk
+
+Monk is a powerful tool that allows you to define, run, and manage your applications to any combination of cloud providers. Here's how you can deploy `langserve` with Monk:
+
+1. **Install Monk**: Follow the instructions on the [Monk documentation](https://docs.monk.io/docs/getting-started/installation) to install Monk on your machine.
+
+2. **Add Your Cloud Provider**: Before running a Kit that provisions instances, load-balancers, volumes etc., you will have to add your cloud provider to Monk. Follow the instructions on the [Monk documentation](https://docs.monk.io/docs/improve/cloud-provider) to add your cloud provider.
+
+3. **Set Up a MonkOS Cluster**: Before deploying any workloads, you need to set up a MonkOS Cluster. This cluster consists of `monkd` instances (peers) connected together via a P2P network. These instances can reside on any machine, anywhere on the internet. The cluster can be automatically grown within cloud environments without any work from its operator. Follow the instructions on the [Monk documentation](https://docs.monk.io/docs/lifecycle/cluster-overview) to set up a MonkOS Cluster. After following the previous steps, you can run:
+```bash
+monk cluster new
+```
+followed by:
+```bash
+monk cluster grow
+```
+and follow the interactive prompts to set up the cluster.
+
+3. **Load the Configuration**: Load the `langserve.yaml` configuration into Monk with the following command:
+```bash
+monk load langserve/langserve.yaml
+```
+
+4. **Run the Application**: Run the application with the following command:
+```bash
+monk run -t $CLUSTER_TAG langserve/langserve
+```
+
+5. **(Optional) Group Runnables**: If you have multiple runnables that you want to run together, you can define a process group. For example:
+```yaml
+my-group:
+defines: process-group
+runnable-list:
+- langserve/langserve
+- other/runnable
+```
+
+Load the group with `monk load mygroup.yaml`, then run it with `monk run my-group`.
+
+Remember to replace `langserve/langserve` with the actual path to your runnable, and `other/runnable` with the paths to any other runnables you want to include in the group.
