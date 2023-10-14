@@ -230,7 +230,7 @@ gcloud run deploy [your-service-name] --source . --port 8001 --allow-unauthentic
 ```
 
 
-``## Deploying with Monk
+### Deploy with Monk
 
 Monk is a powerful tool that allows you to define, run, and manage your applications to any combination of cloud providers. Here's how you can deploy `langserve` with Monk:
 
